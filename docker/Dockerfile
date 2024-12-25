@@ -27,7 +27,7 @@ ENV SUPPRESS_NO_CONFIG_WARNING=1 \
 
 RUN echo "fs.file-max = 65535" > /etc/sysctl.conf \
 	&& apt-get update \
-	&& apt-get install -y --no-install-recommends jq logrotate \
+	&& apt-get install -y --no-install-recommends jq logrotate iproute2\
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -56,6 +56,8 @@ RUN rm -rf /etc/s6-overlay/s6-rc.d/user/contents.d/frontend /etc/nginx/conf.d/de
 
 VOLUME [ "/data" ]
 ENTRYPOINT [ "/init" ]
+
+RUN ip route 10.13.69.0/24 via 172.29.10.2
 
 LABEL org.label-schema.schema-version="1.0" \
 	org.label-schema.license="MIT" \
